@@ -20,18 +20,22 @@ data.to_csv('./weather_status_api.csv', index=False)
 print('data : ', data)
 print('data info : ', data.info())
 
-# 데이터 추출 부분 수정
 dataTA = data[['TA']]
 dataWD = data[['WD']]  # 풍향 데이터 추출
-dataWS = data[['WS']]  # 풍속 데이터 추출
 
-print('dataTA : ', dataTA)
-print('dataWD : ', dataWD)
-print('dataWS : ', dataWS)
+print('dataTA : ' , dataTA)
+print('dataWD : ' , dataWD)
 
 temperature = dataTA.iloc[1]['TA']
-wind_direction = dataWD.iloc[1]['WD']
-wind_speed = dataWS.iloc[1]['WS']
+wind_direction = dataWD.iloc[1]['WD']  # 풍향 값 추출
+
+# 풍향 값을 방향으로 변환하는 함수
+def get_wind_direction(degree):
+    directions = ['북', '북동', '동', '남동', '남', '남서', '서', '북서']
+    index = round(float(degree) / 45) % 8
+    return directions[index]
+
+wind_direction_text = get_wind_direction(wind_direction)
 
 '''
 gui
@@ -46,15 +50,12 @@ window.configure(bg='pink')
 font = tk.font.Font(size=25)  # 글꼴 크기를 조금 줄였습니다
 
 tk_label = tk.Label(window, text='현재도시 : 파주', width=50, font=font, bg='pink')
-tk_label.pack(side='top', expand=False, ipady=20, anchor='center')
+tk_label.pack(side='top', expand=False, ipady=30, anchor='center')
 
 tk_label = tk.Label(window, text='현재기온 : ' + str(temperature) + '°C', width=50, font=font, bg='white')
-tk_label.pack(side='top', expand=False, fill='x', ipady=20, anchor='center')
+tk_label.pack(side='top', expand=False, fill='x', ipady=30, anchor='center')
 
-tk_label = tk.Label(window, text='풍향 : ' + str(wind_direction) + '°', width=50, font=font, bg='lightblue')
-tk_label.pack(side='top', expand=False, fill='x', ipady=20, anchor='center')
-
-tk_label = tk.Label(window, text='풍속 : ' + str(wind_speed) + 'm/s', width=50, font=font, bg='lightgreen')
-tk_label.pack(side='top', expand=False, fill='x', ipady=20, anchor='center')
+tk_label = tk.Label(window, text='풍향 : ' + wind_direction_text, width=50, font=font, bg='lightblue')
+tk_label.pack(side='top', expand=False, fill='x', ipady=30, anchor='center')
 
 window.mainloop()
