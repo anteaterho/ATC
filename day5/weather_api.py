@@ -13,9 +13,12 @@ url = domain + tm + stn + help + auth
 
 response = requests.get(url)
 
+#데이터 공백으로 파싱해서 저장
 data = pd.read_csv(io.StringIO(response.text), sep='\s+', skiprows=2)
 
-data.to_csv('./weather_status_api.csv', index=False)
+#데이터 프레임을 csv 파일로 저장
+data.to_csv('./api_resut.csv', index=False)
+
 
 print('data : ', data)
 print('data info : ', data.info())
